@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "project1-zimakosov-vladislav-m25-555"
+version = "0.1.0"
+description = ""
+authors = ["Vlad Zimakosov <zimakosov-vladik@yandex.ru>"]
+packages = [
+    { include = "labyrinth_game" },
+]
+
+[tool.poetry.dependencies]
+python = ">=3.13,<3.14"
+
+[tool.poetry.scripts]
+project = "labyrinth_game.main:main"
+
+[build-system]
+requires = ["poetry-core>=1.9.0,<2.0.0"]
+build-backend = "poetry.core.masonry.api"
