@@ -6,6 +6,33 @@ from labyrinth_game.constants import ROOMS
 
 from labyrinth_game.utils import describe_current_room
 
+from labyrinth_game.player_actions import (
+    get_input,
+    show_inventory,
+    move_player,
+    take_item,
+    use_item,
+)
+
+def process_command(game_state, command):
+    parts = command.split()
+    verb = parts[0].lower() if parts else ""
+    arg = parts[1] if len(parts) > 1 else ""
+
+    match verb:
+        case "look":
+            describe_current_room(game_state)
+        case "inventory":
+            show_inventory(game_state)
+        case "go":
+            move_player(game_state, arg)
+        case "take":
+            take_item(game_state, arg)
+        case "use":
+            use_item(game_state, arg)
+        case "quit" | "exit":
+            game_state["game_over"] = True
+
 def main():
     game_state = {
         'player_inventory': [],  # Инвентарь игрока
@@ -19,6 +46,7 @@ def main():
 
     while not game_state["game_over"]:
         command = input("> ")
+        process_command(game_state, command)
 
 if __name__ == "__main__":
     main()
