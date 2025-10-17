@@ -4,7 +4,7 @@ from labyrinth_game import player_actions, utils
 
 from labyrinth_game.constants import ROOMS
 
-from labyrinth_game.utils import describe_current_room
+from labyrinth_game.utils import describe_current_room, solve_puzzle, attempt_open_treasure
 
 from labyrinth_game.player_actions import (
     get_input,
@@ -30,6 +30,11 @@ def process_command(game_state, command):
             take_item(game_state, arg)
         case "use":
             use_item(game_state, arg)
+        case "solve":
+            if game_state["current_room"] == "treasure_room":
+                attempt_open_treasure(game_state)
+            else:
+                solve_puzzle(game_state)
         case "quit" | "exit":
             game_state["game_over"] = True
 

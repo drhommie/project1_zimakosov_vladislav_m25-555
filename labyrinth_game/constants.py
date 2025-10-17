@@ -1,3 +1,5 @@
+PUZZLE_REWARD = 10
+
 ROOMS = {
     'entrance': {
         'description': (
