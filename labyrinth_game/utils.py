@@ -1,5 +1,5 @@
+from math import sin, floor
 from labyrinth_game.constants import ROOMS, PUZZLE_REWARD
-
 
 def describe_current_room(game_state):
     current_room = game_state["current_room"]
@@ -102,3 +102,53 @@ def show_help():
     print("  solve           - попытаться решить загадку в комнате")
     print("  quit            - выйти из игры")
     print("  help            - показать это сообщение")
+
+def pseudo_random(seed, modulo):
+    x = sin(seed * 12.9898) * 43758.5453
+    frac = x - floor(x)
+    return floor(frac * modulo)
+
+def trigger_trap(game_state):
+    print("Ловушка активирована! Пол стал дрожать...")
+
+    inventory = game_state['player_inventory']
+
+    if inventory:
+        seed = game_state.get('steps_taken', 0)
+        idx = pseudo_random(seed, len(inventory))
+        lost_item = inventory.pop(idx)
+        print('Вы потеряли:', lost_item)
+        return
+
+    seed = game_state.get("steps_taken", 0)
+    roll = pseudo_random(seed, 10)
+    if roll < 3:
+        print("Поражение. Игра окончена.")
+        game_state["game_over"] = True
+    else:
+        print("Вы уцелели.")
+
+def random_event(game_state):
+    seed = game_state.get('steps_taken',0)
+
+    if pseudo_random(seed, 10) != 0:
+        return
+
+    event_type = pseudo_random(seed + 1, 3)
+
+    current_room = game_state["current_room"]
+    inventory = game_state["player_inventory"]
+
+    if event_type == 0:
+        print("Вы находите на полу монетку.")
+        ROOMS[current_room]["items"].append("coin")
+
+    elif event_type == 1:
+        print("Вы слышите шорох.")
+        if "sword" in inventory:
+            print("Вы достали меч - он отпугнул существо.")
+
+    elif event_type == 2:
+        if current_room == "trap_room" and "torch" not in inventory:
+            print("Здесь опасно.")
+            trigger_trap(game_state)
