@@ -4,7 +4,11 @@ from labyrinth_game import player_actions, utils
 
 from labyrinth_game.constants import ROOMS
 
-from labyrinth_game.utils import describe_current_room, solve_puzzle, attempt_open_treasure
+from labyrinth_game.utils import (
+    describe_current_room, 
+    solve_puzzle, 
+    attempt_open_treasure,
+)
 
 from labyrinth_game.player_actions import (
     get_input,
@@ -18,6 +22,10 @@ def process_command(game_state, command):
     parts = command.split()
     verb = parts[0].lower() if parts else ""
     arg = parts[1] if len(parts) > 1 else ""
+
+    if verb in ('north','south','east','west'):
+        move_player(game_state, verb)
+        return   
 
     match verb:
         case "look":
@@ -37,6 +45,8 @@ def process_command(game_state, command):
                 solve_puzzle(game_state)
         case "quit" | "exit":
             game_state["game_over"] = True
+        case _:
+             print('Неизвестная команда.')
 
 def main():
     game_state = {
