@@ -8,7 +8,7 @@
 
 ## Установка
 
-> Требуется **Python 3.13+** и **Poetry**.
+> Требуется **Python 3.11+** и **Poetry**.
 
 ```bash
 # установка зависимостей
@@ -31,7 +31,7 @@ make project
 Ниже приведена запись полного сценария —  
 от запуска игры до победы (с решением загадки и открытием сокровищницы):
 
-[![asciicast](https://asciinema.org/a/VWFiMPVJ92fYKByHumEeZFIvH)](https://asciinema.org/a/VWFiMPVJ92fYKByHumEeZFIvH)
+[![asciicast](https://asciinema.org/a/VWFiMPVJ92fYKByHumEeZFIvH.svg)](https://asciinema.org/a/VWFiMPVJ92fYKByHumEeZFIvH)
 
 ---
 
@@ -56,6 +56,6 @@ make project
 ## Информация о проекте
 
 **Автор:** Владислав Зимаков (группа m25-555)  
-**Версия Python:** 3.13  
+**Версия Python:** 3.11  
 **Среда разработки:** macOS + Poetry  
 **Лицензия:** учебный проект

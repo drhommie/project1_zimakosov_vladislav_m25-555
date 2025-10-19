@@ -3,6 +3,7 @@ from labyrinth_game.utils import describe_current_room, random_event
 
 
 def show_inventory(game_state):
+    """Печатает содержимое инвентаря игрока либо сообщает, что он пуст."""
     inventory = game_state["player_inventory"]
     if inventory:
         print("Инвентарь:", ", ".join(inventory))
@@ -11,6 +12,7 @@ def show_inventory(game_state):
 
 
 def get_input(prompt="> "):
+    """Возвращает строку, введённую пользователем; на Ctrl+C/D возвращает 'quit'."""
     try:
         return input(prompt)
     except (KeyboardInterrupt, EOFError):
@@ -19,6 +21,7 @@ def get_input(prompt="> "):
 
 
 def move_player(game_state, direction):
+    """Перемещает игрока в соседнюю комнату по направлению, если выход существует."""
     current = game_state["current_room"]
     exits = ROOMS[current]["exits"]
 
@@ -48,6 +51,7 @@ def move_player(game_state, direction):
 
 
 def take_item(game_state, item_name):
+    """Перемещает игрока в соседнюю комнату по направлению, если выход существует."""
     room = game_state["current_room"]
     if item_name in ROOMS[room]["items"]:
         game_state["player_inventory"].append(item_name)
@@ -58,6 +62,7 @@ def take_item(game_state, item_name):
 
 
 def use_item(game_state, item_name):
+    """Использует предмет из инвентаря; эффекты зависят от типа предмета."""
     inventory = game_state["player_inventory"]
     if item_name not in inventory:
         print("У вас нет такого предмета.")
