@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "project1-zimakosov-vladislav-m25-555"
 version = "0.1.0"
-description = ""
+description = "Консольная игра-лабиринт на Python. Игрок исследует комнаты, собирает предметы и решает загадки, чтобы найти сокровище."
 authors = ["Vlad Zimakosov <zimakosov-vladik@yandex.ru>"]
 packages = [
     { include = "labyrinth_game" },
@@ -10,24 +10,22 @@ packages = [
 [tool.poetry.dependencies]
 python = ">=3.13,<3.14"
 
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.4.0"
+
 [tool.poetry.scripts]
 project = "labyrinth_game.main:main"
-
-[build-system]
-requires = ["poetry-core>=1.9.0,<2.0.0"]
-build-backend = "poetry.core.masonry.api"
 
 [tool.ruff]
 line-length = 88
 target-version = "py311"
-exclude = ["venv", ".venv", "dist", "__pycache__", ".git"]
+exclude = ["venv", ".venv", "dist", "__pycache__"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I"]
 ignore = []
 
+[build-system]
+requires = ["poetry-core>=1.9.0,<2.0.0"]
+build-backend = "poetry.core.masonry.api"
 
-[dependency-groups]
-dev = [
-    "ruff (>=0.14.1,<0.15.0)"
-]
