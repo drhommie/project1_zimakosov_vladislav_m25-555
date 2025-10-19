@@ -1,26 +1,34 @@
 from math import floor, sin
 
-from labyrinth_game.constants import COMMANDS, PUZZLE_REWARD, ROOMS
+from labyrinth_game.constants import (
+    COMMANDS,
+    DEFAULT_SCORE,
+    DEFAULT_STEPS,
+    EVENT_FIND,
+    EVENT_NOISE,
+    EVENT_PROBABILITY,
+    EVENT_TRAP,
+    HELP_PAD,
+    PUZZLE_REWARD,
+    RANDOM_EVENT_OFFSET,
+    RANDOM_EVENT_TYPES,
+    ROOMS,
+    TRAP_DEATH_THRESHOLD,
+)
 
 
 def describe_current_room(game_state):
     current_room = game_state["current_room"]
     room_data = ROOMS[current_room]
 
-    # Название комнаты
     print(f"== {current_room.upper()} ==")
-
-    # Описание комнаты
     print(room_data["description"])
 
-    # Список видимых предметов
     if room_data["items"]:
         print("Заметные предметы:", ", ".join(room_data["items"]))
 
-    # Доступные выходы
     print("Выходы:", ", ".join(room_data["exits"].keys()))
 
-    # Наличие загадки
     if room_data["puzzle"] is not None:
         print("Кажется, здесь есть загадка (используйте команду solve).")
 
@@ -49,7 +57,7 @@ def solve_puzzle(game_state):
         reward = PUZZLE_REWARD
         if room_id == "library":
             reward = PUZZLE_REWARD * 2
-        game_state["score"] = game_state.get("score", 0) + reward
+        game_state["score"] = game_state.get("score", DEFAULT_SCORE) + reward
     else:
         print("Неверно. Попробуйте снова.")
         if room_id == "trap_room":
@@ -83,9 +91,7 @@ def attempt_open_treasure(game_state):
         print("Кода нет.")
         return
 
-    question = puzzle[0]
-    correct_answer = puzzle[1]
-
+    question, correct_answer = puzzle
     print(question)
     user_code = input("Ваш ответ: ").strip().lower()
 
@@ -98,11 +104,10 @@ def attempt_open_treasure(game_state):
         print("Неверный код.")
 
 
-# labyrinth_game/utils.py
 def show_help(commands=COMMANDS):
     print("\nДоступные команды:")
     for cmd, desc in commands.items():
-        print(f"  {cmd.ljust(16)} - {desc}")
+        print(f"  {cmd.ljust(HELP_PAD)} - {desc}")
 
 
 def pseudo_random(seed, modulo):
@@ -117,15 +122,15 @@ def trigger_trap(game_state):
     inventory = game_state["player_inventory"]
 
     if inventory:
-        seed = game_state.get("steps_taken", 0)
+        seed = game_state.get("steps_taken", DEFAULT_STEPS)
         idx = pseudo_random(seed, len(inventory))
         lost_item = inventory.pop(idx)
         print("Вы потеряли:", lost_item)
         return
 
-    seed = game_state.get("steps_taken", 0)
-    roll = pseudo_random(seed, 10)
-    if roll < 3:
+    seed = game_state.get("steps_taken", DEFAULT_STEPS)
+    roll = pseudo_random(seed, EVENT_PROBABILITY)
+    if roll < TRAP_DEATH_THRESHOLD:
         print("Поражение. Игра окончена.")
         game_state["game_over"] = True
     else:
@@ -133,26 +138,26 @@ def trigger_trap(game_state):
 
 
 def random_event(game_state):
-    seed = game_state.get("steps_taken", 0)
+    seed = game_state.get("steps_taken", DEFAULT_STEPS)
 
-    if pseudo_random(seed, 10) != 0:
+    if pseudo_random(seed, EVENT_PROBABILITY) != 0:
         return
 
-    event_type = pseudo_random(seed + 1, 3)
+    event_type = pseudo_random(seed + RANDOM_EVENT_OFFSET, RANDOM_EVENT_TYPES)
 
     current_room = game_state["current_room"]
     inventory = game_state["player_inventory"]
 
-    if event_type == 0:
+    if event_type == EVENT_FIND:
         print("Вы находите на полу монетку.")
         ROOMS[current_room]["items"].append("coin")
 
-    elif event_type == 1:
+    elif event_type == EVENT_NOISE:
         print("Вы слышите шорох.")
         if "sword" in inventory:
-            print("Вы достали меч - он отпугнул существо.")
+            print("Вы достали меч — он отпугнул существо.")
 
-    elif event_type == 2:
+    elif event_type == EVENT_TRAP:
         if current_room == "trap_room" and "torch" not in inventory:
             print("Здесь опасно.")
             trigger_trap(game_state)

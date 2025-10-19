@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from labyrinth_game.constants import INITIAL_STEPS
 from labyrinth_game.player_actions import (
     get_input,
     move_player,
@@ -50,7 +51,7 @@ def main():
         "player_inventory": [],  # Инвентарь игрока
         "current_room": "entrance",  # Текущая комната
         "game_over": False,  # Значения окончания игры
-        "steps_taken": 0,  # Количество шагов
+        "steps_taken": INITIAL_STEPS,  # Количество шагов
     }
     print("Добро пожаловать в Лабиринт сокровищ!")
     describe_current_room(game_state)
