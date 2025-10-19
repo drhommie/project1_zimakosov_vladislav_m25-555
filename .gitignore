@@ -1,4 +1,34 @@
-.venv
-dist
+# Виртуальные окружения
+.venv/
+venv/
 
-__pycache__
+# Кэш Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Кэш тестов и линтеров
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+coverage/
+
+# Сборка и дистрибутивы
+build/
+dist/
+*.egg-info/
+*.egg
+
+# IDE и системные файлы
+.vscode/
+.idea/
+.DS_Store
+
+# Логи и временные файлы
+*.log
+*.tmp
+
+# Asciinema записи (если не требуется в репо)
+*.cast
+
